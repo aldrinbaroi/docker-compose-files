@@ -1,0 +1,13 @@
+version: "3.2"
+services:
+  rabbitmq:
+    image: rabbitmq:${IMAGE_TAG}
+    hostname: ${SERVER_HOST_NAME}
+    ports:
+      - published: ${SERVER_HOST_PORT}
+        target: 5672
+      - published: ${MANAGEMENT_HOST_PORT}
+        target: 15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=${DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${DEFAULT_PASS}
