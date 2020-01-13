@@ -4,7 +4,7 @@ services:
     image: gitea/gitea
     volumes:
       - type: bind
-        source: ./data-gitea
+        source: ${GITEA_LOCAL_PERSISTENT_VOL}
         target: /data
     ports:
       - target: 3000
@@ -12,11 +12,11 @@ services:
       - target: 22
         published: ${GITEA_SERVER_SSH_PORT}
     environment:
-      - MAILER_ENABLED=true
-      - MAILER_HOST=ms.vhubon.com:1025
-      - MAILER_FROM=aldrin.baroi@gmail.com
-      - MAILER_USER=aldrin.baroi@gmail.com2
-      - MAILER_PASSWD=mailerpassword
+      - MAILER_ENABLED=${GITEA_MAILER_ENABLED}
+      - MAILER_HOST=${GITEA_MAILER_HOST}
+      - MAILER_FROM=${GITEA_MAILER_FROM}
+      - MAILER_USER=${GITEA_MAILER_USER}
+      - MAILER_PASSWD=${GITEA_MAILER_PASSWORD}
     depends_on:
         - db
     restart: always
