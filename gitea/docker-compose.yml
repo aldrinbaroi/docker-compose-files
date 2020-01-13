@@ -8,9 +8,15 @@ services:
         target: /data
     ports:
       - target: 3000
-        published: 3000
+        published: ${GITEA_SERVER_HTTP_PORT}
       - target: 22
-        published: 1022
+        published: ${GITEA_SERVER_SSH_PORT}
+    environment:
+      - MAILER_ENABLED=true
+      - MAILER_HOST=ms.vhubon.com:1025
+      - MAILER_FROM=aldrin.baroi@gmail.com
+      - MAILER_USER=aldrin.baroi@gmail.com2
+      - MAILER_PASSWD=mailerpassword
     depends_on:
         - db
     restart: always
@@ -18,17 +24,18 @@ services:
     image: bitnami/mariadb
     restart: always
     environment:
-      - MARIADB_ROOT_PASSWORD=gitea
-      - MARIADB_DATABASE=gitea
-      - MARIADB_USER=gitea
-      - MARIADB_PASSWORD=gitea
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
     volumes:
       - type: bind
-        source: ./data-mariadb
+        source: ${MARIADB_LOCAL_PERSISTENT_VOL}
         target: /var/lib/mysql
     ports:
       - target: 3306
-        published: 13306
+        published: ${MARIADB_SERVER_PORT}
     expose: 
       - 3306
 
+#::END::
