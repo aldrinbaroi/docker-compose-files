@@ -1,0 +1,21 @@
+version: "3.2"
+services:
+  emby:
+    image: emby/embyserver:latest
+    volumes:
+      - type: bind
+        source: ${EMBY_VOL_CONFIG}
+        target: /config
+      - type: bind
+        source: ${EMBY_VOL_SHARE_1}
+        target: /mnt/share1
+    devices:
+      - /dev/dri:${EMBY_DEVICES_DIR}
+    ports:
+      - target: 8096
+        published: ${EMBY_SERVER_HTTP_PORT}
+      - target: 8920
+        published: ${EMBY_SERVER_HTTPS_PORT}
+    restart: always
+
+#::END::
