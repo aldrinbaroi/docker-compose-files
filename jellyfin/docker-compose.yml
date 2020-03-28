@@ -15,8 +15,9 @@ services:
       - type: bind
         source: ${JELLYFIN_VOL_CACHE}
         target: /cache
-    #devices:
-    #  - /dev/dri:${JELLYFIN_DEVICES_DIR}
+      - type: bind
+        source: ${JELLYFIN_VOL_TRANSCODE}
+        target: /transcode
     ports:
       - target: 8096
         published: ${JELLYFIN_SERVER_HTTP_PORT}
