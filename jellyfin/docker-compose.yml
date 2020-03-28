@@ -1,0 +1,27 @@
+version: "3.2"
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    volumes:
+      - type: bind
+        source: ${JELLYFIN_VOL_CONFIG}
+        target: /config
+      - type: bind
+        source: ${JELLYFIN_VOL_MEDIA}
+        target: /media
+      - type: bind
+        source: ${JELLYFIN_VOL_METADATA}
+        target: /metadata
+      - type: bind
+        source: ${JELLYFIN_VOL_CACHE}
+        target: /cache
+    #devices:
+    #  - /dev/dri:${JELLYFIN_DEVICES_DIR}
+    ports:
+      - target: 8096
+        published: ${JELLYFIN_SERVER_HTTP_PORT}
+      - target: 8920
+        published: ${JELLYFIN_SERVER_HTTPS_PORT}
+    restart: always
+
+#::END::
