@@ -1,0 +1,47 @@
+version: '3'
+networks:
+  apps_network:
+      external: true
+services:
+  mysql-client:
+    image: imega/mysql-client
+    environment:
+      HOST: mariadb
+      USER: root
+      PASSWORD: localapp
+    command: >
+       sh -c "mysql -u root -plocalapp -h mariadb --execute=\"create database if not exists owncloud\"
+       && mysql -u root -plocalapp -h mariadb --execute=\"create user if not exists 'owncloud' identified by 'owncloud'\"
+       && mysql -u root -plocalapp -h mariadb --execute=\"grant all privileges on owncloud.*  to 'owncloud'@'%'\""
+    networks:
+    - apps_network
+
+  owncloud:
+    image: owncloud/server
+    restart: always
+    ports: 
+    - 10001:8080
+    volumes:
+    - ./data:/mnt/data
+    networks:
+    - apps_network
+    environment:
+      OWNCLOUD_DOMAIN: baroi_family
+      OWNCLOUD_DB_TYPE: mysql
+      OWNCLOUD_DB_NAME: owncloud
+      OWNCLOUD_DB_USERNAME: owncloud
+      OWNCLOUD_DB_PASSWORD: owncloud
+      OWNCLOUD_DB_HOST: mariadb
+      OWNCLOUD_ADMIN_USERNAME: admin
+      OWNCLOUD_ADMIN_PASSWORD: "Aeb$$92508"
+      OWNCLOUD_REDIS_ENABLED: "true"
+      OWNCLOUD_REDIS_HOST: redis
+    healthcheck:
+      test: ["CMD", "/usr/bin/healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 5 
+    depends_on:
+    - mysql-client
+
+#::END::
