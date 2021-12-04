@@ -1,0 +1,19 @@
+version: '3'
+
+networks:
+  apps_network:
+    external: true
+
+services:
+  redis:
+    image: redis
+    restart: always
+    ports:
+    - 6379:6379
+    networks:
+    - apps_network
+    volumes:
+    - ./data:/data
+    - ./redis.conf:/usr/local/etc/redis/redis.conf
+
+#::END::
