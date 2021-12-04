@@ -1,0 +1,29 @@
+version: '3'
+networks:
+  apps_network:
+      external: true
+services:
+  drop-db:
+    image: imega/mysql-client
+    environment:
+      HOST: mariadb
+      USER: root
+      PASSWORD: localapp
+    command: >
+       sh -c "echo '===================[ Show users ]========================================'
+       && mysql -u root -plocalapp -h mariadb --execute=\"select user from mysql.user\"
+       && echo '=======================[ Drop user  ]===================================='
+       && mysql -u root -plocalapp -h mariadb --execute=\"drop user if exists owncloud\"
+       && echo '=======================[ Show users ]===================================='
+       && mysql -u root -plocalapp -h mariadb --execute=\"select user from mysql.user\"
+       && echo '=======================[ Show databases ]================================'
+       && mysql -u root -plocalapp -h mariadb --execute=\"show databases\"
+       && echo '=======================[ Drop database ]================================='
+       && mysql -u root -plocalapp -h mariadb --execute=\"drop database if exists owncloud\"
+       && echo '=======================[ Show databases ]================================'
+       && mysql -u root -plocalapp -h mariadb --execute=\"show databases\"
+       && echo '========================================================================='"
+    networks:
+    - apps_network
+
+#::END::
