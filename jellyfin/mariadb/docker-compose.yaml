@@ -1,0 +1,22 @@
+version: '3'
+
+networks:
+  apps_network:
+    external: true
+
+services:
+  mariadb:
+    image: mariadb
+    command: --skip-innodb-read-only-compressed
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=localapp
+      - MYSQL_USER=localapp
+      - MYSQL_PASSWORD=localapp
+      - MYSQL_DATABASE=base
+    networks:
+      - apps_network
+    volumes:
+      - ./data:/var/lib/mysql
+
+#::END::
